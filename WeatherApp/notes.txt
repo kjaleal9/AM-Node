@@ -2,3 +2,5 @@ NPM Modules
 
 1. Request - Use this to make HTTP requests to APIs
     - Deprecated but can substitute with postman-request and use exactly the same
+
+2. Express - Ability to create a web server with Node
