@@ -4,3 +4,12 @@ NPM Modules
     - Deprecated but can substitute with postman-request and use exactly the same
 
 2. Express - Ability to create a web server with Node
+    - app.get('',(req, res) => {}) - this function takes a route and a function that describes what to do when someone visits a route.
+        - first argument in callback is an object that contains information about the request coming in and response allows customization of what is going to be sent back.
+
+    -res.send() - sends something to be rendered by the browser
+    -app.listen() - takes the port to start the server in, and takes a callback when the port is opened
+    -res.render() - render an HTML file
+        -In order to render an html file you must specify the absolute path in the res.render function
+    -app.use() - customize server
+    -express.static() - Function that takes folder that will be served
