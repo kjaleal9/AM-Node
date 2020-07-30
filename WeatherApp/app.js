@@ -1,13 +1,13 @@
-console.log('Starting');
+const request = require('postman-request')
 
-setTimeout(() => {
-	console.log('5 second timer');
-}, 5000);
-setTimeout(() => {
-	console.log('3 second timer');
-}, 3000);
-setTimeout(() => {
-	console.log('2 second timer');
-}, 2000);
+const URL = 'http://api.weatherstack.com/current'
+const apiKey = '3b8e7fc4aec4fbba9c2d6ba53c3fbfec'
+const location = 'Chicago'
 
-console.log('Stopping');
+const weatherRequest = `${URL}?access_key=${apiKey}&query=${location}`
+
+
+request({url: weatherRequest}, (err, response) =>  {
+    const data = JSON.parse(response.body)
+    console.log(data.current)
+})
