@@ -9,7 +9,12 @@ NPM Modules
 
     -res.send() - sends something to be rendered by the browser
     -app.listen() - takes the port to start the server in, and takes a callback when the port is opened
-    -res.render() - render an HTML file
-        -In order to render an html file you must specify the absolute path in the res.render function
+    -res.render() - render a view
+        -In order to render a view you must specify the absolute path in the res.render function
     -app.use() - customize server
     -express.static() - Function that takes folder that will be served
+    -app.set() - set a value for an express setting
+
+3. handlebars - template tool to render dynamic pages
+
+4. hbs - uses handlebars behind the scenes and interfaces well with express
