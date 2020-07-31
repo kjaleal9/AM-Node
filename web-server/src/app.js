@@ -66,9 +66,16 @@ app.get('/weather', (req, res) => {
                         error: 'Cannot connect to location services',
                     });
                 }
+                const {
+                    temperature,
+                    feelslike,
+                    weather_descriptions,
+                } = forecastData;
                 res.send({
                     location: data.location,
-                    forecastData: forecastData,
+                    forecastData: `${weather_descriptions}.
+                    It is currently ${temperature} degrees outside.
+                    It feels like ${feelslike} degrees outside.`,
                 });
             }
         );
