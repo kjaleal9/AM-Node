@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const Task = require('./task');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -40,6 +42,21 @@ const userSchema = new mongoose.Schema({
             }
         },
     },
+    tokens: [
+        {
+            token: {
+                type: String,
+                required: true,
+            },
+        },
+    ],
+});
+
+// Virtual property is a relationship between two entities
+userSchema.virtual('tasks', {
+    ref: 'Task',
+    localField: '_id',
+    foreignField: 'owner',
 });
 
 userSchema.statics.findByCredentials = async (email, password) => {
@@ -58,7 +75,25 @@ userSchema.statics.findByCredentials = async (email, password) => {
     return user;
 };
 
-// Hash plain text password
+userSchema.methods.generateAuthToken = async function () {
+    const user = this;
+    const token = jwt.sign({ _id: user.id.toString() }, 'thisismynewcourse');
+    user.tokens = user.tokens.concat({ token });
+    await user.save();
+    return token;
+};
+
+userSchema.methods.toJSON = function () {
+    const user = this;
+    const userObject = user.toObject();
+
+    delete userObject.password;
+    delete userObject.tokens;
+
+    return userObject;
+};
+
+// Hash plain text password middleware
 userSchema.pre('save', async function (next) {
     const user = this;
 
@@ -66,6 +101,15 @@ userSchema.pre('save', async function (next) {
         user.password = await bcrypt.hash(user.password, 8);
     }
 
+    next();
+});
+
+// Delete user tasks when user is removed
+userSchema.pre('remove', async function (next) {
+    const user = this;
+    await Task.deleteMany({
+        owner: user._id,
+    });
     next();
 });
 
