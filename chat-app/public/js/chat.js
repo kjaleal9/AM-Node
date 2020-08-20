@@ -1,12 +1,22 @@
 const socket = io();
 
-socket.on('countUpdated', count => {
-    console.log('The count has been updated!', count);
-    countElement.innerHTML = count;
+socket.on('message', message => {
+	console.log(message);
 });
 
-document.querySelector('#increment').addEventListener('click', e => {
-    socket.emit('increment');
+document.querySelector('#chatForm').addEventListener('submit', e => {
+	e.preventDefault();
+	const message = e.target.elements.message.value;
+	socket.emit('sendMessage', message);
 });
 
-const countElement = document.querySelector('#count');
+document.querySelector('#send-location').addEventListener('click', () => {
+	if (!navigator.geolocation) {
+		return alert('Geolocation is not supported by your browser');
+	}
+
+	navigator.geolocation.getCurrentPosition(position => {
+        const { latitude, longitude } = position.coords;
+		socket.emit('sendLocation', { latitude, longitude });
+	});
+});
